@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "163572532607",
+    "project_id": "crud-grupo3-293be",
+    "storage_bucket": "crud-grupo3-293be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163572532607:android:8eea4d1241c3a5e20c064a",
+        "android_client_info": {
+          "package_name": "com.example.tarea31_pm1_grupo3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeXcR7q-rFsqUsgjTBa9VMCizLgPDdSCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
