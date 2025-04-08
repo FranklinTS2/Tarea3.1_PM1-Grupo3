@@ -1,18 +1,18 @@
 package com.example.tarea31_pm1_grupo3.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.tarea31_pm1_grupo3.R;
-
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
-
+        // Ir directamente a CrearPersonaActivity
+        Intent intent = new Intent(this, CrearPersonaActivity.class);
+        startActivity(intent);
+        finish(); // Para que no se pueda volver con el botón atrás
     }
 }
