@@ -1,4 +1,4 @@
-package com.example.tarea31_pm1_grupo3.Modelo;
+package com.example.tarea31_pm1_grupo3.Activities;
 
 public class Persona {
     public String id, nombres, apellidos, correo, fechanac, foto;

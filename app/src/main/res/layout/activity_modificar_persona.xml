@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/background"
+    tools:context=".Activities.ModificarPersona">
 
     <LinearLayout
         android:orientation="vertical"
@@ -14,7 +18,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imgPersona"
+            android:id="@+id/imgPersonaModificar"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:src="@drawable/imagen"
@@ -22,7 +26,7 @@
             android:layout_marginBottom="24dp" />
 
         <EditText
-            android:id="@+id/etNombres"
+            android:id="@+id/etIdModificar"
             android:hint="Nombre(s)"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
@@ -34,7 +38,19 @@
             android:padding="18dp"/>
 
         <EditText
-            android:id="@+id/etApellidos"
+            android:id="@+id/etNombresModificar"
+            android:hint="Nombre(s)"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:padding="18dp"/>
+
+        <EditText
+            android:id="@+id/etApellidosModificar"
             android:hint="Apellido(s)"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
@@ -46,7 +62,7 @@
             android:padding="18dp"/>
 
         <EditText
-            android:id="@+id/etCorreo"
+            android:id="@+id/etCorreoModificar"
             android:hint="Correo electrónico"
             android:inputType="textEmailAddress"
             android:textColor="#FFFFFF"
@@ -57,7 +73,7 @@
             android:layout_marginTop="16dp" />
 
         <EditText
-            android:id="@+id/etFecha"
+            android:id="@+id/etFechaModificar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -73,8 +89,8 @@
 
 
         <Button
-            android:id="@+id/btnGuardar"
-            android:text="Guardar"
+            android:id="@+id/btnModificar"
+            android:text="Modificar"
             android:textColor="@color/black"
             android:padding="18dp"
 
@@ -84,19 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp" />
 
-        <Button
-            android:id="@+id/btnListado"
-            android:text="Listado"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/white"
 
-            android:padding="18dp"
-            android:layout_marginTop="18dp"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
     </LinearLayout>
-</RelativeLayout>
 
+</RelativeLayout>

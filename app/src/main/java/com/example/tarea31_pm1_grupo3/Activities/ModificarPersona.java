@@ -12,56 +12,62 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tarea31_pm1_grupo3.Modelo.PersonaModelo;
 import com.example.tarea31_pm1_grupo3.R;
 import com.example.tarea31_pm1_grupo3.funciones.FirebaseConf;
 import com.example.tarea31_pm1_grupo3.funciones.imageUtils;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class CrearPersonaActivity extends AppCompatActivity {
-
+public class ModificarPersona extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 100;
 
     private ImageView imgPersona;
-    private EditText etNombres, etApellidos, etCorreo, etFecha;
-    Button btnGuardar, btnListado;
+    private EditText etNombres, etApellidos, etCorreo, etFecha, etId;
+    Button btnModificar;
     private FirebaseFirestore mfirestore;
     PersonaModelo personaModelo;
     FirebaseConf firebaseConf;
     private Calendar calendar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crear_persona);
+
+        setContentView(R.layout.activity_modificar_persona);
 
         mfirestore = FirebaseFirestore.getInstance();
         firebaseConf = new FirebaseConf(mfirestore);
         personaModelo = new PersonaModelo();
 
 
-        imgPersona = findViewById(R.id.imgPersona);
-        etNombres = findViewById(R.id.etNombres);
-        etApellidos = findViewById(R.id.etApellidos);
-        etCorreo = findViewById(R.id.etCorreo);
+        imgPersona = findViewById(R.id.imgPersonaModificar);
+        etId = findViewById(R.id.etIdModificar);
+        etNombres = findViewById(R.id.etNombresModificar);
+        etApellidos = findViewById(R.id.etApellidosModificar);
+        etCorreo = findViewById(R.id.etCorreoModificar);
 
         calendar = Calendar.getInstance();
-        etFecha = findViewById(R.id.etFecha);
-        limpiarDatos();
+        etFecha = findViewById(R.id.etFechaModificar);
+
+        btnModificar = findViewById(R.id.btnModificar);
+        etId.setEnabled(false);
+
+        llenarDatosModificar();
 
         DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
             calendar.set(Calendar.YEAR, year);
@@ -70,18 +76,13 @@ public class CrearPersonaActivity extends AppCompatActivity {
             updateDateField();
         };
 
-        etFecha.setOnClickListener(v -> new DatePickerDialog(CrearPersonaActivity.this, date, calendar
+        etFecha.setOnClickListener(v -> new DatePickerDialog(ModificarPersona.this, date, calendar
                 .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show());
 
-        // Initial update of the date field (optional, shows current date initially)
-
-        btnGuardar = findViewById(R.id.btnGuardar);
-        btnListado = findViewById(R.id.btnListado);
 
 
 
-        // Abrir cámara al tocar imagen
         imgPersona.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -93,7 +94,7 @@ public class CrearPersonaActivity extends AppCompatActivity {
             }
         });
 
-        btnGuardar.setOnClickListener(v -> {
+        btnModificar.setOnClickListener(v -> {
 
 
             if (etNombres.getText().toString().trim().isEmpty() || etApellidos.getText().toString().trim().isEmpty() || etCorreo.getText().toString().trim().isEmpty() || etFecha.getText().toString().trim().isEmpty() || personaModelo.getFoto() == null) {
@@ -104,8 +105,10 @@ public class CrearPersonaActivity extends AppCompatActivity {
                 personaModelo.setApellido(String.valueOf(etApellidos.getText()));
                 personaModelo.setCorreo(String.valueOf(etCorreo.getText()));
                 personaModelo.setFechaNac(String.valueOf(etFecha.getText()));
+                personaModelo.setId(String.valueOf(etId.getText()));
 
-                firebaseConf.subirDatos(this,personaModelo.getNombre(),personaModelo.getApellido(), personaModelo.getCorreo(),personaModelo.getFechaNac(),personaModelo.getFoto());
+
+                firebaseConf.actualizarDatos(this,personaModelo.getId(),personaModelo.getNombre(),personaModelo.getApellido(), personaModelo.getCorreo(),personaModelo.getFechaNac(),personaModelo.getFoto());
                 limpiarDatos();
 
             }
@@ -113,15 +116,6 @@ public class CrearPersonaActivity extends AppCompatActivity {
 
         });
 
-        btnListado.setOnClickListener(v -> {
-            Intent intent =new Intent(getApplicationContext(),Listado.class);
-            startActivity(intent);
-        });
-    }
-    private void updateDateField() {
-        String myFormat = "dd/MM/yyyy"; // Desired date format
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
-        etFecha.setText(sdf.format(calendar.getTime()));
     }
 
     private void limpiarDatos(){
@@ -136,6 +130,33 @@ public class CrearPersonaActivity extends AppCompatActivity {
         personaModelo.setCorreo(null);
         personaModelo.setFechaNac(null);
         personaModelo.setFoto(null);
+
+    }
+
+    private void updateDateField() {
+        String myFormat = "dd/MM/yyyy"; // Desired date format
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+        etFecha.setText(sdf.format(calendar.getTime()));
+    }
+
+    private void llenarDatosModificar(){
+        Intent previousIntent = getIntent();
+        String idPersona = previousIntent.getStringExtra("Id");
+        String nombrePersona = previousIntent.getStringExtra("Nombre");
+        String apellidoPersona = previousIntent.getStringExtra("Apellido");
+        String correoPersona = previousIntent.getStringExtra("Correo");
+        String fechaPersona = previousIntent.getStringExtra("Fecha");
+        String imagenPersona = previousIntent.getStringExtra("Imagen");
+
+
+        etNombres.setText(nombrePersona);
+        imgPersona.setImageBitmap(imageUtils.decodeFromBase64(imagenPersona));
+        etApellidos.setText(apellidoPersona);
+        etCorreo.setText(correoPersona);
+        etFecha.setText(fechaPersona);
+        etId.setText(idPersona);
+
+        personaModelo.setFoto(imagenPersona);
 
     }
 
@@ -175,6 +196,3 @@ public class CrearPersonaActivity extends AppCompatActivity {
         }
     }
 }
-
-
-
